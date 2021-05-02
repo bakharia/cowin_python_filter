@@ -48,11 +48,9 @@ if end:
 else:
   finish_time = end
 
-
-
 """Function to get centres sorted by the most available ones first"""
 
-def get_centers(read_json, fee_type: str, age_limit: int, start_time: datetime, finish_time: datetime, availability:str = 'stock'):
+def get_centers(read_json, fee_type: str, age_limit: int, start_time: datetime, finish_time: datetime, availability:str):
   """
   @param read_json: Json variable
   @availability: If vaccines are in stock
@@ -90,6 +88,7 @@ def get_centers(read_json, fee_type: str, age_limit: int, start_time: datetime, 
   if not session_center.empty:
     session_center[['start', 'finish']] = session_center['slots'].str.split('-', expand=True)
     session_center['start'] = session_center['start'].apply(lambda x: convert_time(x))
+    session_center['finish'] = session_center['finish'].apply(lambda x: convert_time(x))
 
     if start_time and finish_time:
       session_center = session_center[(session_center['start'] >= start_time) & (session_center['start'] <= finish_time)]
@@ -112,12 +111,8 @@ for date in date_range:
     elif [] in read_json.values():
       print(f'Fetch successful, no vaccination centres available for PIN: {pincode} and Date: {date}  - {read_json}')
     else:
-      data = get_centers(read_json, availability, fee_type, age_limit, start_time, finish_time)
+      data = get_centers(read_json, fee_type, age_limit, start_time, finish_time, availability)
       data_list.append(data)
 data_set = pd.concat(data_list)
 data_set.sort_values(['available_capacity', 'min_age_limit'], ascending=[False, True], inplace=True, ignore_index=True)
 data_set
-
-data_set['available_capacity'] > 0
-
-response.ok

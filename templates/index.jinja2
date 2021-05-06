@@ -1,0 +1,55 @@
+{% extends 'layout.jinja2' %}
+
+{% block styles %}
+    <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/forms.css')}}"
+            type="text/css"
+    />
+{% endblock %}
+
+{% block content %}
+
+    <div class="form-wrapper">
+
+      <h2 class="title">Personal Information</h2>
+
+      {% for message in form.age.errors %}
+         <div>{{ message }}</div>
+      {% endfor %}
+      
+      {% for message in form.pincode.errors %}
+         <div>{{ message }}</div>
+      {% endfor %}
+
+        <form method="POST" action="{{ url_for('data') }}">
+            <fieldset class="form-field">
+                {{ form.age.label }}
+                {{ form.age}}
+            </fieldset>
+
+            <fieldset class="form-field">
+                {{ form.pincode.label }}
+                {{ form.pincode }}
+            </fieldset>
+
+            <fieldset class="form-field">
+                {{form.type.label}}
+                {{form.type}}
+            </fieldset>
+
+            <fieldset class="form-field">
+                {{ form.start_date.label }}
+                {{ form.start_date}}
+            </fieldset>
+
+            <fieldset class="form-field">
+                {{form.availability.label}}
+                {{form.availability}}
+            </fieldset>
+            
+            {{ form.submit }}
+        </form>
+    </div>
+
+{% endblock %}
